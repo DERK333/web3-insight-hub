@@ -1,0 +1,697 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Web3 Insight Hub</title>
+  <meta name="description" content="A lightweight GitHub Pages dashboard for following Web3 ecosystems, DAO governance, and market signals." />
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #020617;
+      --panel: rgba(15, 23, 42, 0.82);
+      --panel-strong: #0f172a;
+      --panel-soft: rgba(30, 41, 59, 0.85);
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --accent: #38bdf8;
+      --accent-2: #8b5cf6;
+      --good: #22c55e;
+      --warn: #f59e0b;
+      --border: rgba(148, 163, 184, 0.18);
+      --shadow: 0 24px 60px rgba(2, 6, 23, 0.45);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, Segoe UI, Roboto, Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top, rgba(56, 189, 248, 0.16), transparent 30%),
+        radial-gradient(circle at right, rgba(139, 92, 246, 0.2), transparent 28%),
+        linear-gradient(180deg, #020617 0%, #0f172a 100%);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .shell {
+      width: min(1180px, calc(100% - 2rem));
+      margin: 0 auto;
+      padding: 1.25rem 0 3rem;
+    }
+
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1rem 0;
+      backdrop-filter: blur(16px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 2.25rem;
+      height: 2.25rem;
+      border-radius: 0.8rem;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #020617;
+      font-size: 1rem;
+      box-shadow: 0 10px 28px rgba(56, 189, 248, 0.35);
+    }
+
+    .nav-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .nav-links a {
+      padding: 0.45rem 0.75rem;
+      border: 1px solid transparent;
+      border-radius: 999px;
+      transition: 180ms ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--text);
+      border-color: var(--border);
+      background: rgba(15, 23, 42, 0.7);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.6fr) minmax(320px, 0.95fr);
+      gap: 1.25rem;
+      align-items: stretch;
+      padding-top: 1rem;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+    }
+
+    .hero-main {
+      padding: 2rem;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.45rem 0.8rem;
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.24);
+      color: #bae6fd;
+      font-size: 0.84rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 1rem 0 0.75rem;
+      font-size: clamp(2.2rem, 6vw, 4rem);
+      line-height: 1.02;
+      letter-spacing: -0.04em;
+    }
+
+    .hero-copy {
+      max-width: 60ch;
+      color: #cbd5e1;
+      font-size: 1.02rem;
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+
+    .cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.85rem;
+      margin-bottom: 1.75rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.55rem;
+      padding: 0.9rem 1.2rem;
+      border-radius: 14px;
+      font-weight: 700;
+      border: 1px solid var(--border);
+      transition: 180ms ease;
+    }
+
+    .btn-primary {
+      color: #020617;
+      background: linear-gradient(135deg, #67e8f9, var(--accent));
+      border-color: transparent;
+    }
+
+    .btn-secondary {
+      color: var(--text);
+      background: rgba(15, 23, 42, 0.72);
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.04);
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.9rem;
+    }
+
+    .stat {
+      padding: 1rem;
+      border-radius: 18px;
+      background: rgba(2, 6, 23, 0.35);
+      border: 1px solid rgba(148, 163, 184, 0.12);
+    }
+
+    .stat span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.88rem;
+      margin-bottom: 0.45rem;
+    }
+
+    .stat strong {
+      font-size: 1.5rem;
+      letter-spacing: -0.03em;
+    }
+
+    .hero-side {
+      padding: 1.35rem;
+      display: grid;
+      gap: 1rem;
+    }
+
+    .section-title {
+      margin: 0 0 0.9rem;
+      font-size: 1.05rem;
+      letter-spacing: -0.02em;
+    }
+
+    .mini-card {
+      padding: 1rem;
+      border-radius: 20px;
+      background: linear-gradient(180deg, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.6));
+      border: 1px solid var(--border);
+    }
+
+    .signal-meter {
+      height: 0.8rem;
+      background: rgba(148, 163, 184, 0.15);
+      border-radius: 999px;
+      overflow: hidden;
+      margin: 0.85rem 0;
+    }
+
+    .signal-meter > div {
+      height: 100%;
+      width: 72%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--good), var(--accent), var(--accent-2));
+    }
+
+    .mini-list {
+      display: grid;
+      gap: 0.85rem;
+    }
+
+    .mini-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      color: var(--muted);
+      font-size: 0.94rem;
+    }
+
+    .mini-row strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 1.25rem;
+      margin-top: 1.25rem;
+    }
+
+    .content-card {
+      padding: 1.4rem;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+
+    .toolbar-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      width: 100%;
+    }
+
+    .input,
+    .select {
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 12px;
+      padding: 0.8rem 0.9rem;
+      min-width: 0;
+    }
+
+    .input {
+      flex: 1 1 260px;
+    }
+
+    .select {
+      flex: 0 0 180px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      padding: 0.95rem 0.7rem;
+      text-align: left;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+      vertical-align: top;
+    }
+
+    th {
+      color: var(--muted);
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    td strong {
+      display: block;
+      margin-bottom: 0.2rem;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      border-radius: 999px;
+      padding: 0.3rem 0.6rem;
+      font-size: 0.8rem;
+      font-weight: 700;
+      background: rgba(148, 163, 184, 0.14);
+      color: #cbd5e1;
+    }
+
+    .up {
+      color: #86efac;
+    }
+
+    .down {
+      color: #fca5a5;
+    }
+
+    .feed {
+      display: grid;
+      gap: 0.9rem;
+    }
+
+    .feed-item {
+      padding: 1rem;
+      border-radius: 18px;
+      border: 1px solid rgba(148, 163, 184, 0.12);
+      background: rgba(2, 6, 23, 0.32);
+    }
+
+    .feed-item header {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 0.5rem;
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    .feed-item strong {
+      display: block;
+      margin-bottom: 0.3rem;
+      font-size: 1rem;
+    }
+
+    .feed-item p {
+      margin: 0;
+      color: #cbd5e1;
+      line-height: 1.55;
+    }
+
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+      color: var(--muted);
+      font-size: 0.92rem;
+      padding: 1.5rem 0 0.25rem;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    @media (max-width: 980px) {
+      .hero,
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .nav {
+        position: static;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .shell {
+        width: min(100% - 1rem, 1180px);
+      }
+
+      .hero-main,
+      .content-card,
+      .hero-side {
+        padding: 1.1rem;
+      }
+
+      .stats {
+        grid-template-columns: 1fr;
+      }
+
+      th:nth-child(4),
+      td:nth-child(4) {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <nav class="nav">
+      <div class="brand">
+        <div class="brand-mark">W3</div>
+        <span>Web3 Insight Hub</span>
+      </div>
+      <div class="nav-links">
+        <a href="#watchlist">Watchlist</a>
+        <a href="#signals">Signals</a>
+        <a href="#calendar">Governance</a>
+      </div>
+    </nav>
+
+    <section class="hero">
+      <article class="panel hero-main">
+        <div class="eyebrow">GitHub Pages deployed</div>
+        <h1>Track ecosystems, governance, and token momentum in one place.</h1>
+        <p class="hero-copy">
+          This static dashboard runs entirely on GitHub Pages. It gives you a clean starting point for a Web3 landing page or market-monitoring app without needing a backend.
+        </p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="#watchlist">Open watchlist</a>
+          <a class="btn btn-secondary" href="https://github.com/DERK333/web3-insight-hub" target="_blank" rel="noreferrer">View repository</a>
+        </div>
+        <div class="stats">
+          <div class="stat">
+            <span>Tracked ecosystems</span>
+            <strong id="trackedCount">0</strong>
+          </div>
+          <div class="stat">
+            <span>Bullish signals</span>
+            <strong id="bullishCount">0</strong>
+          </div>
+          <div class="stat">
+            <span>Governance events</span>
+            <strong id="eventCount">0</strong>
+          </div>
+        </div>
+      </article>
+
+      <aside class="panel hero-side">
+        <div class="mini-card">
+          <h2 class="section-title">Market pulse</h2>
+          <div class="signal-meter"><div></div></div>
+          <div class="mini-list">
+            <div class="mini-row"><span>Risk appetite</span><strong>Moderate</strong></div>
+            <div class="mini-row"><span>DeFi rotation</span><strong>Improving</strong></div>
+            <div class="mini-row"><span>Governance cadence</span><strong>4 proposals this week</strong></div>
+          </div>
+        </div>
+
+        <div class="mini-card" id="calendar">
+          <h2 class="section-title">Next governance events</h2>
+          <div class="mini-list" id="eventList"></div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="grid">
+      <article class="panel content-card" id="watchlist">
+        <div class="toolbar">
+          <div>
+            <h2 class="section-title">Ecosystem watchlist</h2>
+            <div class="muted">Search and filter the sample dashboard data.</div>
+          </div>
+        </div>
+        <div class="toolbar-controls">
+          <input id="searchInput" class="input" type="search" placeholder="Search ecosystem, narrative, or catalyst" />
+          <select id="chainFilter" class="select" aria-label="Filter by chain">
+            <option value="all">All chains</option>
+          </select>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Project</th>
+              <th>Chain</th>
+              <th>24h</th>
+              <th>Narrative</th>
+            </tr>
+          </thead>
+          <tbody id="watchlistBody"></tbody>
+        </table>
+      </article>
+
+      <aside class="panel content-card" id="signals">
+        <h2 class="section-title">Signal feed</h2>
+        <div class="feed" id="feedList"></div>
+      </aside>
+    </section>
+
+    <footer class="footer">
+      <span>Static GitHub Pages app for DERK333/web3-insight-hub.</span>
+      <span>Update the inline data in <code>index.html</code> to customize the dashboard.</span>
+    </footer>
+  </div>
+
+  <script>
+    const projects = [
+      {
+        name: "Arbitrum",
+        chain: "Layer 2",
+        move: "+4.8%",
+        direction: "up",
+        narrative: "DeFi activity rising as DEX incentives expand.",
+        catalyst: "Liquidity mining season"
+      },
+      {
+        name: "Base",
+        chain: "Layer 2",
+        move: "+3.1%",
+        direction: "up",
+        narrative: "Consumer app traction and growing onchain social usage.",
+        catalyst: "Creator onboarding"
+      },
+      {
+        name: "Solana",
+        chain: "Layer 1",
+        move: "+2.4%",
+        direction: "up",
+        narrative: "High retail participation and meme volatility with strong throughput.",
+        catalyst: "DEX volume breakout"
+      },
+      {
+        name: "Optimism",
+        chain: "Layer 2",
+        move: "-0.9%",
+        direction: "down",
+        narrative: "Governance focus remains on grants and sequencer decentralization.",
+        catalyst: "Retro funding round"
+      },
+      {
+        name: "EigenLayer",
+        chain: "Ethereum",
+        move: "+1.6%",
+        direction: "up",
+        narrative: "Restaking narrative stays active as AVS launches accumulate.",
+        catalyst: "New AVS launches"
+      },
+      {
+        name: "Uniswap",
+        chain: "Ethereum",
+        move: "-1.2%",
+        direction: "down",
+        narrative: "Fee switch debate and cross-chain deployment remain key watchpoints.",
+        catalyst: "Governance vote"
+      }
+    ];
+
+    const feed = [
+      {
+        source: "Research note",
+        time: "2h ago",
+        title: "L2 rotations are favoring ecosystems with sticky app usage",
+        body: "Arbitrum and Base continue to outperform when user growth is tied to clear product retention rather than one-off incentives."
+      },
+      {
+        source: "DAO watch",
+        time: "5h ago",
+        title: "Uniswap governance discussion reopened around protocol fee routing",
+        body: "The latest forum chatter suggests delegates want tighter guardrails before any fee redirection ships live."
+      },
+      {
+        source: "Market signal",
+        time: "9h ago",
+        title: "Restaking remains constructive but more selective",
+        body: "Flows are concentrating into projects with visible validator demand and credible downstream service adoption."
+      }
+    ];
+
+    const events = [
+      { label: "Arbitrum delegate call", when: "Today" },
+      { label: "Optimism grant review", when: "Tomorrow" },
+      { label: "Uniswap temp check closes", when: "Fri" },
+      { label: "EigenLayer AVS update", when: "Mon" }
+    ];
+
+    const watchlistBody = document.getElementById("watchlistBody");
+    const chainFilter = document.getElementById("chainFilter");
+    const searchInput = document.getElementById("searchInput");
+    const feedList = document.getElementById("feedList");
+    const eventList = document.getElementById("eventList");
+
+    function renderStats() {
+      document.getElementById("trackedCount").textContent = String(projects.length);
+      document.getElementById("bullishCount").textContent = String(projects.filter((item) => item.direction === "up").length);
+      document.getElementById("eventCount").textContent = String(events.length);
+    }
+
+    function populateFilter() {
+      const chains = [...new Set(projects.map((item) => item.chain))].sort();
+      for (const chain of chains) {
+        const option = document.createElement("option");
+        option.value = chain;
+        option.textContent = chain;
+        chainFilter.append(option);
+      }
+    }
+
+    function renderWatchlist() {
+      const query = searchInput.value.trim().toLowerCase();
+      const chain = chainFilter.value;
+      const filtered = projects.filter((item) => {
+        const matchesChain = chain === "all" || item.chain === chain;
+        const haystack = `${item.name} ${item.chain} ${item.narrative} ${item.catalyst}`.toLowerCase();
+        return matchesChain && haystack.includes(query);
+      });
+
+      watchlistBody.innerHTML = filtered.map((item) => `
+        <tr>
+          <td>
+            <strong>${item.name}</strong>
+            <span class="muted">${item.catalyst}</span>
+          </td>
+          <td><span class="pill">${item.chain}</span></td>
+          <td class="${item.direction}">${item.move}</td>
+          <td>${item.narrative}</td>
+        </tr>
+      `).join("");
+    }
+
+    function renderFeed() {
+      feedList.innerHTML = feed.map((item) => `
+        <article class="feed-item">
+          <header>
+            <span>${item.source}</span>
+            <span>${item.time}</span>
+          </header>
+          <strong>${item.title}</strong>
+          <p>${item.body}</p>
+        </article>
+      `).join("");
+    }
+
+    function renderEvents() {
+      eventList.innerHTML = events.map((item) => `
+        <div class="mini-row">
+          <span>${item.label}</span>
+          <strong>${item.when}</strong>
+        </div>
+      `).join("");
+    }
+
+    chainFilter.addEventListener("change", renderWatchlist);
+    searchInput.addEventListener("input", renderWatchlist);
+
+    renderStats();
+    populateFilter();
+    renderWatchlist();
+    renderFeed();
+    renderEvents();
+  </script>
+</body>
+</html>
