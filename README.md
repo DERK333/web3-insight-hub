@@ -95,7 +95,7 @@ Opening `index.html` directly works too. The page makes no network requests, so 
 
 A push to `main` runs [`.github/workflows/deploy-pages.yml`](.github/workflows/deploy-pages.yml). The workflow checks out the repo, uploads the repository root, and publishes it with GitHub Pages.
 
-The live site is [https://derk333.github.io/web3-insight-hub/](https://derk333.github.io/web3-insight-hub/).
+The live site is [web3-insight-hub](https://derk333.github.io/web3-insight-hub/) as well as [web3tech.site](https://web3tech.site/)
 
 `.nojekyll` tells Pages to skip Jekyll and serve the files as they are. `404.html` is a copy of the dashboard, so an unknown path still opens the board. The same workflow can be started by hand from the Actions tab.
 
